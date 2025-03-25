@@ -23,3 +23,4 @@ python/xlntpyarrow.egg-info/
 /.vs/
 /out/
 /CMakeSettings.json
+.cache
