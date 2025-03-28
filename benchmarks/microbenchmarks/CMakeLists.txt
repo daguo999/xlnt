@@ -14,7 +14,7 @@ include(FetchContent)
 FetchContent_Declare(
 	googlebenchmark
 	GIT_REPOSITORY 	https://github.com/google/benchmark
-	GIT_TAG			v1.5.0
+	GIT_TAG			v1.5.1
 )
 # download if not already present
 FetchContent_GetProperties(googlebenchmark)
