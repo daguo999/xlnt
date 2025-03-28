@@ -140,6 +140,9 @@ struct worksheet_impl
     std::vector<range_reference> merged_cells_;
     std::unordered_map<std::string, named_range> named_ranges_;
 
+    // 数据验证 type = list
+    std::vector<std::pair<range_reference, std::string>> data_validations_list_;
+
     optional<phonetic_pr> phonetic_properties_;
     optional<header_footer> header_footer_;
 

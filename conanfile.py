@@ -5,7 +5,7 @@ from conan.tools.layout import cmake_layout
 
 class HelloConan(ConanFile):
     name = "xlnt"
-    version = "1.5.0"
+    version = "1.5.1"
     license = "<Put the package license here>"
     author = "<Put your name here> <And your email here>"
     url = "https://github.com/daguo999/xlnt"

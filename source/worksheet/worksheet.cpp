@@ -124,6 +124,16 @@ std::vector<range_reference> worksheet::merged_ranges() const
     return d_->merged_cells_;
 }
 
+void worksheet::data_validation(const range_reference &reference, const std::string &formula1)
+{
+    d_->data_validations_list_.push_back(std::make_pair(reference, formula1));
+}
+
+std::vector<std::pair<range_reference, std::string>> worksheet::data_validations_list() const
+{
+    return d_->data_validations_list_;
+}
+
 bool worksheet::has_page_margins() const
 {
     return d_->page_margins_.is_set();

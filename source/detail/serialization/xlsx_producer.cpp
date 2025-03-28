@@ -2763,6 +2763,28 @@ void xlsx_producer::write_worksheet(const relationship &rel)
         write_end_element(xmlns, "autoFilter");
     }
 
+    if (ws.data_validations_list().size() > 0)
+    {
+        write_start_element(xmlns, "dataValidations");
+        write_attribute("count", ws.data_validations_list().size());
+
+        for (auto p : ws.data_validations_list())
+        {
+            write_start_element(xmlns, "dataValidation");
+            write_attribute("type", "list");
+            write_attribute("allowBlank", "1");
+            write_attribute("showInputMessage", "1");
+            write_attribute("showErrorMessage", "1");
+            write_attribute("sqref", p.first.to_string());
+            write_start_element(xmlns, "formula1");
+            write_characters(p.second);
+            write_end_element(xmlns, "formula1");
+            write_end_element(xmlns, "dataValidation");
+        }
+
+        write_end_element(xmlns, "dataValidations");
+    }
+
     if (!ws.merged_ranges().empty())
     {
         write_start_element(xmlns, "mergeCells");

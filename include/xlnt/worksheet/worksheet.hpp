@@ -466,6 +466,12 @@ public:
     /// </summary>
     std::vector<range_reference> merged_ranges() const;
 
+    /// <summary>
+    /// dataValidations, type of element only list.
+    /// </summary>
+        void data_validation(const range_reference &reference, const std::string &formula1);
+        std::vector<std::pair<range_reference, std::string>> data_validations_list() const;
+
     // operators
 
     /// <summary>
