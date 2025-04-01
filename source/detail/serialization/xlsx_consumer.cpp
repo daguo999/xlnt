@@ -2082,7 +2082,10 @@ void xlsx_consumer::read_office_document(const std::string &content_type) // CT_
 
                 defined_name name;
                 name.name = parser().attribute("name");
-                name.sheet_id = parser().attribute<std::size_t>("localSheetId");
+                if (parser().attribute_present("localSheetId"))
+                {
+                    name.sheet_id = parser().attribute<std::size_t>("localSheetId");
+                }
                 name.hidden = false;
                 if (parser().attribute_present("hidden"))
                 {
