@@ -23,14 +23,18 @@ class HelloConan(ConanFile):
 
     def generate(self):
         toolchain_file = self.conf.get("user.toolchain_file", default=None)
+        print("toolchain_file", toolchain_file)
         tc = CMakeToolchain(self)
-        tc.variables["CMAKE_CXX_FLAGS"] = "${CMAKE_CXX_FLAGS} -static-libstdc++"
+        # tc.variables["CMAKE_CXX_FLAGS"] = "${CMAKE_CXX_FLAGS} -static-libstdc++"
         if toolchain_file:
             tc.variables["CMAKE_TOOLCHAIN_FILE"] = toolchain_file
         tc.generate()
 
     def build(self):
         cmake = CMake(self)
+        toolchain_file = self.conf.get("user.toolchain_file", default=None)
+        if toolchain_file:
+            cmake._toolchain_file = toolchain_file
         cmake.configure()
         cmake.build()
 
