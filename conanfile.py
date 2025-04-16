@@ -13,8 +13,8 @@ class HelloConan(ConanFile):
     topics = ("<Put some tag here>", "<here>", "<and here>")
     settings = "os", "compiler", "build_type", "arch"
     generators = "CMakeToolchain", "CMakeDeps"
-    options = {"shared": [True, False], "toolchain_file": "ANY"}
-    default_options = {"shared": True, "toolchain_file": None}
+    options = {"shared": [True, False]}
+    default_options = {"shared": True}
     requires = []
     exports_sources = ["*"]
 
@@ -22,10 +22,11 @@ class HelloConan(ConanFile):
         cmake_layout(self)
 
     def generate(self):
+        toolchain_file = self.conf.get("user.toolchain_file", default=None)
         tc = CMakeToolchain(self)
         tc.variables["CMAKE_CXX_FLAGS"] = "${CMAKE_CXX_FLAGS} -static-libstdc++"
-        if self.options.toolchain_file:
-            tc.variables["CMAKE_TOOLCHAIN_FILE"] = self.options.toolchain_file
+        if toolchain_file:
+            tc.variables["CMAKE_TOOLCHAIN_FILE"] = toolchain_file
         tc.generate()
 
     def build(self):
