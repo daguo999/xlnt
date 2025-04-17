@@ -175,6 +175,11 @@ else()
   target_compile_definitions(xlnt PUBLIC XLNT_STATIC=1)
 endif()
 
+if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+  message("static link c++")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc -Wl,--as-needed")
+endif()
+
 # requires cmake 3.8+
 #target_compile_features(xlnt PUBLIC cxx_std_${XLNT_CXX_LANG})
 

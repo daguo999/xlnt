@@ -1,6 +1,8 @@
+import os
+import platform
+import shutil
+
 from conans import ConanFile
-from conan.tools.cmake import CMake, CMakeToolchain
-from conan.tools.layout import cmake_layout
 
 
 class HelloConan(ConanFile):
@@ -12,35 +14,24 @@ class HelloConan(ConanFile):
     description = "<Description of Hello here>"
     topics = ("<Put some tag here>", "<here>", "<and here>")
     settings = "os", "compiler", "build_type", "arch"
-    generators = "CMakeToolchain", "CMakeDeps"
+    generators = "cmake"
     options = {"shared": [True, False]}
     default_options = {"shared": True}
     requires = []
-    exports_sources = ["*"]
 
-    def layout(self):
-        cmake_layout(self)
-
-    def generate(self):
-        toolchain_file = self.conf.get("user.toolchain_file", default=None)
-        print("toolchain_file", toolchain_file)
-        tc = CMakeToolchain(self)
-        # tc.variables["CMAKE_CXX_FLAGS"] = "${CMAKE_CXX_FLAGS} -static-libstdc++"
-        if toolchain_file:
-            tc.variables["CMAKE_TOOLCHAIN_FILE"] = toolchain_file
-        tc.generate()
+    def init(self):
+        self.source_path = os.getcwd() + "/xlnt"
 
     def build(self):
-        cmake = CMake(self)
-        toolchain_file = self.conf.get("user.toolchain_file", default=None)
-        if toolchain_file:
-            cmake._toolchain_file = toolchain_file
-        cmake.configure()
-        cmake.build()
+        shutil.copytree(self.source_path, "./xlnt", True)
 
     def package(self):
-        cmake = CMake(self)
-        cmake.install()
+        self.copy("*.h", dst="include", src="xlnt/include")
+        self.copy("*.hpp", dst="include", src="xlnt/include")
+        self.copy("libxlnt*.lib", dst="lib", src="xlnt/bin", keep_path=True)
+        self.copy("libxlnt*.dll", dst="bin", src="xlnt/bin", keep_path=True)
+        self.copy("libxlnt*.so*", dst="bin", src="xlnt/bin", keep_path=True, symlinks=True)
+        self.copy("libxlnt*.dylib", dst="lib", src="xlnt/bin", keep_path=True)
 
     def package_info(self):
         self.cpp_info.libs = ["xlnt"]
