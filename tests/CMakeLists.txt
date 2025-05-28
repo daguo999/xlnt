@@ -44,7 +44,7 @@ if(COVERAGE)
 endif()
 
 add_executable(xlnt.test ${RUNNER} ${TESTS} ${HELPERS} $<TARGET_OBJECTS:libstudxml>)
-target_link_libraries(xlnt.test PRIVATE xlnt)
+target_link_libraries(xlnt.test PRIVATE xlnt stdc++)
 target_include_directories(xlnt.test
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../source

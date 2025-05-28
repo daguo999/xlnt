@@ -503,7 +503,10 @@ void read_defined_names(worksheet ws, std::vector<defined_name> defined_names)
         else if (name.name == "_xlnm._FilterDatabase")
         {
             auto i = name.value.find("!");
-            ws.auto_filter(name.value.substr(i + 1));
+            if (name.value != "#REF!") // 略过引用错误
+            {
+                ws.auto_filter(name.value.substr(i + 1));
+            }
         }
         else if (name.name == "_xlnm.Print_Area")
         {
@@ -2678,6 +2681,7 @@ void xlsx_consumer::read_stylesheet()
         {
             auto in_style_records = current_style_element.name() == "cellStyleXfs";
             auto count = parser().attribute<std::size_t>("count");
+            unsigned int countQuotePrefix = 0;
 
             while (in_element(current_style_element))
             {
@@ -2733,8 +2737,10 @@ void xlsx_consumer::read_stylesheet()
 
                 record.first.pivot_button_ = parser().attribute_present("pivotButton")
                     && is_true(parser().attribute("pivotButton"));
-                record.first.quote_prefix_ = parser().attribute_present("quotePrefix")
-                    && is_true(parser().attribute("quotePrefix"));
+                if (parser().attribute_present("quotePrefix")) {
+                    record.first.quote_prefix_ = is_true(parser().attribute("quotePrefix"));
+                    countQuotePrefix++;
+                }
 
                 if (parser().attribute_present("xfId"))
                 {
@@ -2807,7 +2813,8 @@ void xlsx_consumer::read_stylesheet()
             }
 
             if ((in_style_records && count != style_records.size())
-                || (!in_style_records && count != format_records.size()))
+                || (!in_style_records && 
+                    !(count == format_records.size() || count - countQuotePrefix) == format_records.size()))
             {
                 throw xlnt::exception("counts don't match");
             }

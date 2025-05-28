@@ -40,6 +40,7 @@ public:
         register_test(test_construction);
         register_test(test_batch_formatting);
         register_test(test_clear_cells);
+        register_test(test_changed_xlsx);
     }
 
     void test_construction()
@@ -113,6 +114,12 @@ public:
         auto range = ws.range("B1:C3");
         range.clear_cells();
         xlnt_assert_equals(ws.calculate_dimension(), xlnt::range_reference(1, 1, 1, 3));
+    }
+
+    void test_changed_xlsx()
+    {
+        xlnt::workbook wb;
+        wb.load("/home/ddg/code/igms/ELEX-TP/build/bin/涉密人员.xlsx");
     }
 };
 static range_test_suite x;
